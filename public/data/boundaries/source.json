@@ -1,0 +1,37 @@
+{
+  "source": "OpenStreetMap administrative country boundaries (admin_level=2)",
+  "sourceUrl": "https://api.openstreetmap.org/api/0.6",
+  "downloads": [
+    {
+      "url": "https://api.openstreetmap.org/api/0.6/relation/49715/full.json",
+      "sha256": "739141eb4ec5d43a419a97a59723bd68bb288dfaf4e9f2800c950de783f97c89"
+    },
+    {
+      "url": "https://api.openstreetmap.org/api/0.6/relation/59065/full.json",
+      "sha256": "ea3d9a771e0536fad3f7ab8ce17ed2c5fb6de04e6224bdfdde32d3e3ee41aebb"
+    }
+  ],
+  "documentation": "https://wiki.openstreetmap.org/wiki/Tag:boundary=administrative",
+  "license": "ODbL-1.0",
+  "licenseUrl": "https://www.openstreetmap.org/copyright",
+  "attribution": "© OpenStreetMap contributors",
+  "dataTimestamp": null,
+  "retrievedAt": "2026-11-07T01:01:50.452Z",
+  "countries": [
+    {
+      "code": "PL",
+      "vertices": 68069,
+      "relationId": 49715,
+      "relationVersion": 1331,
+      "relationTimestamp": "2026-10-18T11:00:06Z"
+    },
+    {
+      "code": "BY",
+      "vertices": 57098,
+      "relationId": 59065,
+      "relationVersion": 1050,
+      "relationTimestamp": "2026-10-27T18:12:16Z"
+    }
+  ],
+  "limitations": "Community-maintained OSM boundaries, not survey or legal advice. Admin boundaries can include territorial waters. Raster tile caches and snapshot dates may differ. No geometry simplification applied."
+}

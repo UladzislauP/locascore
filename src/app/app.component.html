@@ -1,0 +1,55 @@
+<header class="header">
+  <a class="brand" href="/" aria-label="LocaScore"><span class="brand-symbol"><app-icon name="pin"/></span><span>Loca<span class="brand-light">Score</span></span></a>
+  @if (country(); as activeCountry) {
+  <button class="country-switch" (click)="changeCountry()" [attr.aria-label]="copy().changeCountry"><span class="country-code">{{ activeCountry.code }}</span><span>{{ activeCountry.names[lang()] }}</span><app-icon name="chevron"/></button>
+  <div class="search" (keydown.escape)="dismissResults()">
+    <form (ngSubmit)="search()" novalidate role="search">
+      <label class="sr-only" for="address">{{ copy().address }}</label>
+      <input id="address" name="address" [ngModel]="query" (ngModelChange)="editQuery($event)" [placeholder]="copy().placeholder" maxlength="200" autocomplete="off" [attr.aria-describedby]="errorKey() ? 'search-error' : null" [attr.aria-invalid]="errorKey() === 'invalid'"/>
+      @if (query) { <button mat-icon-button type="button" (click)="clear()" [attr.aria-label]="copy().clear"><app-icon name="close"/></button> }
+      <button class="search-button" mat-flat-button type="submit" [disabled]="loading()" [attr.aria-label]="copy().search">
+        @if (loading()) { <mat-spinner diameter="18"/> } @else { <app-icon name="search"/> }
+      </button>
+    </form>
+    <div class="search-status" aria-live="polite" [attr.aria-busy]="loading()">
+      @if (loading()) { <span class="sr-only">{{ copy().searching }}</span> }
+      @if (errorKey(); as error) { <p class="message error" id="search-error" role="alert">{{ copy()[error] }}</p> }
+      @else if (results().length) {
+        <ul class="results">
+          @for (place of results(); track place.id) {
+            <li><button class="result" (click)="choose(place)"><app-icon name="pin"/><span>{{ place.label }}</span></button></li>
+          }
+        </ul>
+      } @else if (searched()) { <p class="message">{{ copy().empty }}</p> }
+    </div>
+  </div>
+  }
+  <select class="language" name="language" [ngModel]="lang()" (ngModelChange)="setLanguage($event)" [attr.aria-label]="copy().language">
+    @for (language of languages; track language.code) { <option [value]="language.code">{{ language.name }}</option> }
+  </select>
+</header>
+@if (country(); as activeCountry) {
+  <main class="map-region" [attr.aria-label]="copy().mapLabel + ': ' + activeCountry.names[lang()]">
+    <app-location-map [copy]="copy()" [country]="activeCountry" [selected]="selected()" [tileUrl]="tileUrl()" [nearbyFeatures]="nearbyFeatures()" [focusedObject]="focusedObject()" (objectSelect)="focusedObject.set($event)"/>
+    @if (selected(); as place) {
+      <app-area-analysis [place]="place" [country]="activeCountry.code" [lang]="lang()" [focusedObject]="focusedObject()" (analysisChange)="setAnalysis($event)" (categoryChange)="activeCategory.set($event); focusedObject.set(null)" (objectFocus)="focusedObject.set($event)"/>
+    }
+  </main>
+} @else {
+  <main class="country-screen">
+    <section class="country-picker" aria-labelledby="country-heading">
+      <h1 id="country-heading">{{ copy().chooseCountry }}</h1>
+      @if (countriesLoading()) { <mat-spinner diameter="28" [attr.aria-label]="copy().searching"/> }
+      @else if (countriesError()) {
+        <p class="message error" role="alert">{{ copy().countriesError }}</p>
+        <button mat-button (click)="loadCountries()">{{ copy().retry }}</button>
+      } @else {
+        <div class="country-options">
+          @for (item of countries(); track item.code) {
+            <button class="country-option" (click)="selectCountry(item)"><span class="country-code">{{ item.code }}</span><strong>{{ item.names[lang()] }}</strong><app-icon name="arrow"/></button>
+          }
+        </div>
+      }
+    </section>
+  </main>
+}
